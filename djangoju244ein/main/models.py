@@ -1,5 +1,6 @@
 #coding:utf-8
-__author__ = "ila"
+# 定义毕业生模型
+__author__ = "qing12315"
 from django.db import models
 
 from .model import BaseModel
@@ -9,6 +10,32 @@ from datetime import datetime
 
 
 class biyesheng(BaseModel):
+    """
+    定义毕业生信息的数据库模型类。
+
+    Attributes:
+        __doc__ (str): 类的文档字符串，描述该类代表毕业生信息。
+        __tablename__ (str): 表名，对应数据库中的表名。
+        __loginUser__ (str): 登录用户所使用的字段名，这里为 'xuehao'（学号）。
+        __authTables__ (dict): 认证相关的表信息，初始为空字典。
+        __authPeople__ (str): 是否为用户表的标识，'是' 表示是用户表。
+        __loginUserColumn__ (str): 用户表中代表用户名的字段，这里为 'xuehao'。
+        __sfsh__ (str): 是否审核的标识，'否' 表示不需要审核。
+        __authSeparate__ (str): 后台列表权限标识，'否' 表示无特殊权限。
+        __thumbsUp__ (str): 是否启用点赞踩功能，'否' 表示不启用。
+        __intelRecom__ (str): 是否启用智能推荐功能，'否' 表示不启用。
+        __browseClick__ (str): 是否启用浏览点击和投票功能，'否' 表示不启用。
+        __foreEndListAuth__ (str): 前台列表权限标识，'否' 表示无特殊权限。
+        __foreEndList__ (str): 前台列表页面是否存在的标识，'否' 表示不存在。
+        __isAdmin__ (str): 是否为管理员表的标识，'否' 表示不是管理员表。
+        addtime (models.DateTimeField): 记录创建时间的字段。
+        xuehao (models.CharField): 学号字段，唯一且不能为空。
+        mima (models.CharField): 密码字段，不能为空。
+        xingming (models.CharField): 姓名字段，不能为空。
+        xingbie (models.CharField): 性别字段，可为空。
+        zhuanye (models.CharField): 专业字段，可为空。
+        touxiang (models.TextField): 头像字段，可为空。
+    """
     __doc__ = u'''biyesheng'''
     __tablename__ = 'biyesheng'
 

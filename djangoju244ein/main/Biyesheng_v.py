@@ -1,5 +1,5 @@
 #coding:utf-8
-__author__ = "ila"
+__author__ = "qing12315"
 import base64, copy, logging, os, sys, time, xlrd, json, datetime, configparser
 from django.http import JsonResponse
 from django.apps import apps

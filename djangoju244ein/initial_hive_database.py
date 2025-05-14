@@ -1,5 +1,5 @@
 # coding: utf-8
-__author__ = 'ila'
+__author__ = 'qing12315'
 
 from util.configread import config_read
 from util.convert_mysql_to_hive import ConvertMySQLToHive

@@ -1,5 +1,5 @@
 #coding:utf-8
-__author__ = "ila"
+__author__ = "qing12315"
 import urllib.request, json
 import base64
 import urllib.parse

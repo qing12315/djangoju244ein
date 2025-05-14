@@ -1,5 +1,6 @@
 # coding: utf-8
-__author__ = 'ila'
+# 使用PySpark进行数据分析，实现线性回归、聚类和分类分析等机器学习分析功能。
+__author__ = 'qing12315'
 
 import json
 
@@ -13,10 +14,9 @@ from pyspark.sql import SparkSession
 
 def spark_read_mysql(sql, json_filename):
     '''
-    排序
-    :param sql:
-    :param json_filename:
-    :return:
+    从MySQL数据库读取数据并保存为JSON文件
+    :param sql:SQL查询语句
+    :param json_filename:保存JSON文件名
     '''
     df = app.spark.read.format("jdbc").options(url=app.jdbc_url,
                                                dbtable=sql).load()
@@ -34,9 +34,9 @@ def spark_read_mysql(sql, json_filename):
 
 def linear(table_name):
     '''
-    回归
-    :param table_name:
-    :return:
+    线性回归分析
+    :param table_name:表名
+    :return:回归分析结果
     '''
 
     spark = SparkSession.builder.appName("flask").getOrCreate()
@@ -60,9 +60,9 @@ def linear(table_name):
 
 def cluster(table_name):
     '''
-    聚类
-    :param table_name:
-    :return:
+    聚类分析
+    :param table_name:表名
+    :return:聚类中心
     '''
 
     spark = SparkSession.builder.appName("flask").getOrCreate()
@@ -80,8 +80,10 @@ def cluster(table_name):
 
 def selector(table_name, Cols):
     '''
-    分类
-    :return:
+    分类分析
+    :param table_name:表名
+    :param Cols:特征列名列表
+    :return:分类预测结果
     '''
     spark = SparkSession.builder.appName("flask").getOrCreate()
 

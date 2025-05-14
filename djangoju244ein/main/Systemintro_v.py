@@ -1,5 +1,7 @@
 #coding:utf-8
-__author__ = "ila"
+# 实现按时间类型对数据进行分组求和的功能
+# 系统
+__author__ = "qing12315"
 import base64, copy, logging, os, sys, time, xlrd, json, datetime, configparser
 from django.http import JsonResponse
 from django.apps import apps
@@ -19,6 +21,7 @@ from django.shortcuts import redirect
 from django.db.models import Q
 from util.baidubce_api import BaiDuBce
 from .config_model import config
+
 
 
 

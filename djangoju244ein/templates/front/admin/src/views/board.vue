@@ -1,3 +1,4 @@
+# 系统用户交互的关键部分
 <template>
 	<div class="content" :style='{"alignContent":"flex-start","overflow":"hidden","flexWrap":"wrap","background":"url(http://codegen.caihongy.cn/20231227/62f3218553b74dd79e684f6073f00709.jpg) no-repeat center top / 100% 100%","display":"flex","width":"100%","position":"relative","height":"100vh"}'>
 		<div id="particles"></div>

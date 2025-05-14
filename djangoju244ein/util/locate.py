@@ -1,5 +1,5 @@
 #coding:utf-8
-__author__ = "ila"
+__author__ = "qing12315"
 import requests
 def geocoding(ak,lat, lon):
     lat_lon = '{},{}'.format(lat, lon)

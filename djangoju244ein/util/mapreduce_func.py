@@ -1,5 +1,6 @@
 # coding: utf-8
-__author__ = 'ila'
+# 数据处理与分析，基于MapReduce的大数据处理与分析
+__author__ = 'qing12315'
 
 import os
 
@@ -8,7 +9,9 @@ from mrjob.job import MRJob
 from util.hdfs_func import upload_file_to_hdfs
 
 class MySQLMapReduce(MRJob):
-
+    '''
+    自定义MapReduce作业类，用于对MySQL数据库中的数据进行MapReduce处理。
+    '''
     def mapper(self, _, line):
         ret = line.split(",")
         yield (ret[0], float(ret[1]))

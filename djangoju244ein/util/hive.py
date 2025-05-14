@@ -1,5 +1,5 @@
 # coding:utf-8
-__author__ = 'ila'
+__author__ = 'qing12315'
 import  pymysql
 
 sqlDbConn =pymysql.connect(host='127.0.0.1',
