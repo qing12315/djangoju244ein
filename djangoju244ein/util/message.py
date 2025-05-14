@@ -1,5 +1,5 @@
 # coding:utf-8
-# author:ila
+# author:qing12315
 normal_code = "正常"
 redirect_code = "跳转"
 temporary_redirect_code = "暂时跳转"

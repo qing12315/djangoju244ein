@@ -1,5 +1,5 @@
 # coding:utf-8
-# author:ila
+# author:qing12315
 import hashlib
 import base64
 from Crypto.Cipher import DES,AES

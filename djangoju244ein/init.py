@@ -1,5 +1,5 @@
 # coding:utf-8
-# author:ila
+# author:qing12315
 import click,py_compile,os
 from configparser import ConfigParser
 from util.configread import config_read

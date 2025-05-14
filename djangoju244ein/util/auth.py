@@ -1,5 +1,5 @@
 # coding:utf-8
-# author:ila
+# author:qing12315
 import base64, copy
 from django.http import JsonResponse
 from django.apps import apps
