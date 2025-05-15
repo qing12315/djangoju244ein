@@ -1,4 +1,5 @@
 #coding:utf-8
+# 毕业生模型视图逻辑，并为前端提供接口
 __author__ = "qing12315"
 import base64, copy, logging, os, sys, time, xlrd, json, datetime, configparser
 from django.http import JsonResponse
@@ -26,11 +27,20 @@ from .config_model import config
 
 
 def biyesheng_register(request):
+    """
+    处理毕业生注册请求的视图函数。
+    若请求方法为 POST 或 GET，则尝试根据请求数据创建毕业生记录。
+    如果创建过程中出现错误，通常表示用户已存在，返回相应的错误信息。
+
+    :param request: Django 的 HttpRequest 对象，包含请求的相关信息。
+    :return: JsonResponse 对象，包含操作结果的状态码和消息。
+    """
     if request.method in ["POST", "GET"]:
         msg = {'code': normal_code, "msg": mes.normal_code}
         req_dict = request.session.get("req_dict")
 
-
+        # 调用 biyesheng 模型的 createbyreq 方法，尝试根据请求数据创建新记录
+        # 传入 biyesheng 模型自身和请求数据字典
         error = biyesheng.createbyreq(biyesheng, biyesheng, req_dict)
         if error != None:
             msg['code'] = crud_error_code
@@ -552,6 +562,11 @@ def biyesheng_detail(request,id_):
 
 def biyesheng_update(request):
     '''
+    此函数用于更新毕业生信息。处理 POST 或 GET 请求，根据请求数据更新毕业生记录，
+    并在更新前进行一些数据校验和处理。
+
+    :param request: Django 的 HttpRequest 对象，包含请求的相关信息。
+    :return: JsonResponse 对象，包含操作结果的状态码、消息和数据。
     '''
     if request.method in ["POST", "GET"]:
         msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
@@ -571,7 +586,7 @@ def biyesheng_update(request):
         except:
             pass
 
-
+        # 调用 biyesheng 模型的 updatebyparams 方法，根据请求数据更新记录
         error = biyesheng.updatebyparams(biyesheng, biyesheng, req_dict)
         if error!=None:
             msg['code'] = crud_error_code

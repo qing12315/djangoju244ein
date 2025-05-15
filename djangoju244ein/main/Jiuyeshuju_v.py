@@ -1,4 +1,5 @@
 #coding:utf-8
+# 数据增删改查、统计分析到前端交互的完整接口
 __author__ = "qing12315"
 import base64, copy, logging, os, sys, time, xlrd, json, datetime, configparser
 from django.http import JsonResponse
@@ -369,6 +370,7 @@ def jiuyeshuju_save(request):
     后台新增
     '''
     if request.method in ["POST", "GET"]:
+
         msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
         req_dict = request.session.get("req_dict")
         if 'clicktime' in req_dict.keys():
@@ -405,14 +407,17 @@ def jiuyeshuju_save(request):
 
 def jiuyeshuju_add(request):
     '''
-    前台新增
+    前台新增就业数据记录的视图函数。处理 POST 或 GET 请求，根据请求数据创建新的就业数据记录。
+
+    :param request: Django 的 HttpRequest 对象，包含请求的相关信息。
+    :return: JsonResponse 对象，包含操作结果的状态码、消息和数据。
     '''
     if request.method in ["POST", "GET"]:
         msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
         req_dict = request.session.get("req_dict")
         tablename=request.session.get("tablename")
 
-        #获取全部列名
+        # 获取就业数据模型的全部列名
         columns=  jiuyeshuju.getallcolumn( jiuyeshuju, jiuyeshuju)
         try:
             __authSeparate__=jiuyeshuju.__authSeparate__
@@ -428,6 +433,7 @@ def jiuyeshuju_add(request):
                     pass
 
         try:
+            # 尝试获取就业数据模型的 __foreEndListAuth__ 属性，用于判断前台列表的权限
             __foreEndListAuth__=jiuyeshuju.__foreEndListAuth__
         except:
             __foreEndListAuth__=None
@@ -437,9 +443,10 @@ def jiuyeshuju_add(request):
             if tablename!="users":
                 req_dict['userid']=request.session.get("params").get("id")
 
-
+        # 若请求数据字典中包含 addtime 字段，则删除该字段
         if 'addtime' in req_dict.keys():
             del req_dict['addtime']
+        # 调用就业数据模型的 createbyreq 方法，根据请求数据创建新记录
         error= jiuyeshuju.createbyreq(jiuyeshuju,jiuyeshuju, req_dict)
         if error!=None:
             msg['code'] = crud_error_code
@@ -473,10 +480,17 @@ def jiuyeshuju_thumbsup(request,id_):
 
 def jiuyeshuju_info(request,id_):
     '''
+    根据传入的 ID 获取就业数据的详细信息，并在需要时更新浏览点击次数。
+
+    :param request: Django 的 HttpRequest 对象，包含请求的相关信息。
+    :param id_: 要查询的就业数据记录的 ID。
+    :return: JsonResponse 对象，包含操作结果的状态码、消息和详细数据。
     '''
     if request.method in ["POST", "GET"]:
+        # 初始化返回消息，默认状态码和消息表示操作正常
         msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
 
+        # 根据 ID 获取就业数据记录
         data = jiuyeshuju.getbyid(jiuyeshuju,jiuyeshuju, int(id_))
         if len(data)>0:
             msg['data']=data[0]
@@ -488,7 +502,7 @@ def jiuyeshuju_info(request,id_):
                         reversetime = datetime.datetime.strptime(msg['data']['reversetime'], '%Y-%m-%d %H:%M:%S')
                         msg['data']['reversetime'] = reversetime.strftime("%Y-%m-%d %H:%M:%S")
 
-        #浏览点击次数
+        # 尝试获取就业数据模型的 __browseClick__ 属性，用于判断是否需要统计浏览点击次数
         try:
             __browseClick__= jiuyeshuju.__browseClick__
         except:
@@ -570,21 +584,28 @@ def jiuyeshuju_update(request):
 
 def jiuyeshuju_delete(request):
     '''
-    批量删除
+    批量删除就业数据记录的视图函数，支持 POST 和 GET 请求方式。
+    根据请求数据中的 ID 列表，批量删除对应的就业数据记录。
+
+    :param request: Django 的 HttpRequest 对象，包含请求的相关信息。
+    :return: JsonResponse 对象，包含操作结果的状态码、消息和数据。
     '''
     if request.method in ["POST", "GET"]:
         msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
         req_dict = request.session.get("req_dict")
 
+        # 调用 jiuyeshuju 模型的 deletes 方法，传入模型自身、模型自身以及请求数据中的 ID 列表，执行批量删除操作
         error=jiuyeshuju.deletes(jiuyeshuju,
             jiuyeshuju,
              req_dict.get("ids")
         )
-        if error!=None:
+        # 若删除过程中出现错误
+        if error != None:
+            # 修改状态码为操作错误码
             msg['code'] = crud_error_code
+            # 修改消息为错误信息
             msg['msg'] = error
         return JsonResponse(msg)
-
 
 def jiuyeshuju_vote(request,id_):
     '''
@@ -607,17 +628,26 @@ def jiuyeshuju_vote(request,id_):
         return JsonResponse(msg)
 
 def jiuyeshuju_importExcel(request):
+    """
+    处理 Excel 文件导入请求，将 Excel 中的就业数据导入到系统中。
+
+    :param request: Django 的 HttpRequest 对象，包含请求的相关信息。
+    :return: JsonResponse 对象，包含操作结果的状态码和消息。
+    """
     if request.method in ["POST", "GET"]:
         msg = {"code": normal_code, "msg": "成功", "data": {}}
 
+        # 从请求中获取上传的 Excel 文件，若未提供则为空字符串
         excel_file = request.FILES.get("file", "")
+        # 通过文件名分割获取文件扩展名
         file_type = excel_file.name.split('.')[1]
         
         if file_type in ['xlsx', 'xls']:
             data = xlrd.open_workbook(filename=None, file_contents=excel_file.read())
             table = data.sheets()[0]
             rows = table.nrows
-            
+
+            # 检查文件类型是否为 Excel 格式
             try:
                 for row in range(1, rows):
                     row_values = table.row_values(row)
@@ -685,9 +715,11 @@ def jiuyeshuju_importExcel(request):
                     jiuyeshuju.createbyreq(jiuyeshuju, jiuyeshuju, req_dict)
                     
             except:
+                # 若导入过程中出现异常，不做处理
                 pass
                 
         else:
+            # 若文件类型不是 Excel 格式，更新返回消息
             msg = {
                 "msg": "文件类型错误",
                 "code": 500

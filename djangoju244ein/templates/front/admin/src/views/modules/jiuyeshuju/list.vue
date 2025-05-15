@@ -486,11 +486,18 @@ import AddOrUpdate from "./add-or-update";
     },
 
 //统计接口
+      /**
+     * 打开或关闭学历占比图表弹窗，并初始化和加载 ECharts 图表。
+     */
     chartDialog3() {
+      // 切换学历占比图表弹窗的显示状态
       this.chartVisiable3 = !this.chartVisiable3;
+       // 等待 DOM 更新完成后执行回调函数
       this.$nextTick(()=>{
 
+         // 初始化 ECharts 实例，绑定到 id 为 xueliChart3 的 DOM 元素，使用 macarons 主题
         var xueliChart3 = echarts.init(document.getElementById("xueliChart3"),'macarons');
+        // 发送 HTTP GET 请求，获取学历分组数据
         this.$http({
             url: "jiuyeshuju/group/xueli",
             method: "get",

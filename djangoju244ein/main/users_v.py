@@ -1,4 +1,5 @@
 # coding:utf-8
+# 处理个人信息视图逻辑
 __author__ = "qing12315"
 
 from django.http import JsonResponse
@@ -10,19 +11,29 @@ import util.message as mes
 from dj2.settings import host,port,user,passwd,dbName,hasHadoop
 
 def users_login(request):
+    """
+    处理用户登录请求。根据请求数据查询用户信息，并进行身份验证。
+
+    :param request: Django 的 HttpRequest 对象，包含请求的相关信息。
+    :return: JsonResponse 对象，包含登录操作的状态码和消息，或身份验证结果。
+    """
     if request.method in ["POST", "GET"]:
         msg = {'code': normal_code, "msg": mes.normal_code}
+        # 从会话中获取请求数据字典
         req_dict = request.session.get("req_dict")
         if req_dict.get('role')!=None:
             del req_dict['role']
-        
+
+        # 根据请求数据查询用户信息
         datas = users.getbyparams(users, users, req_dict)
         if not datas:
             msg['code'] = password_error_code
             msg['msg'] = mes.password_error_code
             return JsonResponse(msg)
 
+        # 将查询到的用户 ID 添加到请求数据字典中
         req_dict['id'] = datas[0].get('id')
+        # 调用 Auth 类的 authenticate 方法进行身份验证
         return Auth.authenticate(Auth, users, req_dict)
 
 
@@ -148,11 +159,16 @@ def users_update(request):
 
 def users_delete(request):
     '''
+    处理用户删除请求，支持 POST 和 GET 请求方式。根据请求中的用户 ID 列表批量删除用户记录。
+
+    :param request: Django 的 HttpRequest 对象，包含请求的相关信息。
+    :return: JsonResponse 对象，包含操作结果的状态码、消息和数据。
     '''
     if request.method in ["POST", "GET"]:
         msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
         req_dict = request.session.get("req_dict")
 
+        # 调用 users 模型的 deletes 方法，传入模型自身、模型自身以及请求数据中的用户 ID 列表，执行删除操作
         error = users.deletes(users,
             users,
             req_dict.get("ids")

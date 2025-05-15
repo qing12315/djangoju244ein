@@ -405,16 +405,20 @@ def gonggaoxinxi_save(request):
 
 def gonggaoxinxi_add(request):
     '''
-    前台新增
+    前台新增公告信息的视图函数。处理 POST 或 GET 请求，根据请求数据创建新的公告信息记录。
+
+    :param request: Django 的 HttpRequest 对象，包含请求的相关信息。
+    :return: JsonResponse 对象，包含操作结果的状态码、消息和数据。
     '''
     if request.method in ["POST", "GET"]:
         msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
         req_dict = request.session.get("req_dict")
         tablename=request.session.get("tablename")
-
-        #获取全部列名
+ 
+        # 获取公告信息模型的全部列名
         columns=  gonggaoxinxi.getallcolumn( gonggaoxinxi, gonggaoxinxi)
         try:
+            # 尝试获取公告信息模型的 __authSeparate__ 属性，用于判断是否只查询个人数据
             __authSeparate__=gonggaoxinxi.__authSeparate__
         except:
             __authSeparate__=None
@@ -428,6 +432,7 @@ def gonggaoxinxi_add(request):
                     pass
 
         try:
+            # 尝试获取公告信息模型的 __foreEndListAuth__ 属性，用于判断前台列表的权限
             __foreEndListAuth__=gonggaoxinxi.__foreEndListAuth__
         except:
             __foreEndListAuth__=None
@@ -437,9 +442,11 @@ def gonggaoxinxi_add(request):
             if tablename!="users":
                 req_dict['userid']=request.session.get("params").get("id")
 
-
+        # 若请求数据字典中包含 addtime 字段，则删除该字段
         if 'addtime' in req_dict.keys():
             del req_dict['addtime']
+
+        # 调用公告信息模型的 createbyreq 方法，根据请求数据创建新记录
         error= gonggaoxinxi.createbyreq(gonggaoxinxi,gonggaoxinxi, req_dict)
         if error!=None:
             msg['code'] = crud_error_code
@@ -473,10 +480,16 @@ def gonggaoxinxi_thumbsup(request,id_):
 
 def gonggaoxinxi_info(request,id_):
     '''
+    根据传入的 ID 获取公告信息的详细内容，并在需要时更新浏览点击次数。
+
+    :param request: Django 的 HttpRequest 对象，包含请求的相关信息。
+    :param id_: 要查询的公告信息记录的 ID。
+    :return: JsonResponse 对象，包含操作结果的状态码、消息和详细数据。
     '''
     if request.method in ["POST", "GET"]:
         msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
 
+        # 根据 ID 获取公告信息记录
         data = gonggaoxinxi.getbyid(gonggaoxinxi,gonggaoxinxi, int(id_))
         if len(data)>0:
             msg['data']=data[0]
@@ -488,7 +501,7 @@ def gonggaoxinxi_info(request,id_):
                         reversetime = datetime.datetime.strptime(msg['data']['reversetime'], '%Y-%m-%d %H:%M:%S')
                         msg['data']['reversetime'] = reversetime.strftime("%Y-%m-%d %H:%M:%S")
 
-        #浏览点击次数
+        # 尝试获取公告信息模型的 __browseClick__ 属性，用于判断是否需要统计浏览点击次数
         try:
             __browseClick__= gonggaoxinxi.__browseClick__
         except:
