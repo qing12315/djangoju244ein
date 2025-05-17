@@ -17,7 +17,7 @@
   - `config.ini`：配置文件，存储数据库连接信息等配置
 
 ### 2. MTV 结构对应文件
-- **M（Model）**：`djangoju244ein/main/model.py` 定义了基础模型类，实际的模型表结构定义可能在 `djangoju244ein/main/models.py` 中（代码未完整提供）。
+- **M（Model）**：`djangoju244ein/main/model.py` 定义了基础模型类，实际的模型表结构定义可能在 `djangoju244ein/main/models.py` 中。
 - **T（Template）**：`djangoju244ein/templates/` 目录下的 `.vue` 文件为前端页面模板，如 `jiuyeshuju/list.vue`、`biyesheng/add - or - update.vue` 等。
 - **V（View）**：`djangoju244ein/main/Jiuyeshuju_v.py`、`djangoju244ein/main/Gonggaoxinxi_v.py` 等文件为视图文件，处理业务逻辑和请求响应。
 
